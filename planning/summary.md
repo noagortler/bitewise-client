@@ -26,7 +26,8 @@ Bitewise is a well-rounded capstone project that touches every layer of full sta
 
 **API integration** The app uses the Google Maps JavaScript API for map rendering and the Google Places API for restaurant search, both of which require proper key management, error handling, and thoughtful integration into the frontend.
 
-Together these make Bitewise a project that is personal, technically well-rounded, and demonstrates the kind of skills that matter in a junior developer role.
+Together these make Bitewise a project that is personal, technically well-rounded, and a strong reflections of 
+everything we learned throughout the bootcamp.
 
 ---
 
