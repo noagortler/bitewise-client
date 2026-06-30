@@ -4,7 +4,7 @@ import session from "express-session";
 import passport from "passport";
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
-import { connectDB } from "./config/db";
+import { connectDB } from "./config/db.js";
 
 dotenv.config();
 
@@ -13,17 +13,15 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-// Allow requests from the React dev server, with cookies
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 
-// Sessions stored in MongoDB so they persist across server restarts
 app.use(
   session({
-    secret: process.env.SESSION_SECRET as string,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI as string }),
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
   })
 );
