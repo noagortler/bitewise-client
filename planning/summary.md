@@ -58,7 +58,7 @@ everything we learned throughout the bootcamp.
 | Layer | Technology |
 |---|---|
 | Frontend | React, TypeScript, Vite, Material UI |
-| Backend | Node.js, Express |
+| Backend | Node.js, Express, JavaScript |
 | Database | MongoDB |
 | Authentication | Passport.js |
 | Map rendering | Google Maps JavaScript API |

@@ -31,7 +31,7 @@ With food allergies on the rise, I know I am not alone in this. Bitewise is the 
 | Layer | Technology |
 |---|---|
 | Frontend | React, TypeScript, Vite, Material UI |
-| Backend | Node.js, Express |
+| Backend | Node.js, Express, JavaScript |
 | Database | MongoDB |
 | Authentication | Passport.js |
 | Map rendering | Google Maps JavaScript API |
@@ -60,17 +60,12 @@ Used to test Express API endpoints and backend business logic.
 
 1. Install dependencies:
 ```
-npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
+npm install --save-dev jest supertest
 ```
 
-2. Add test script to `package.json`:
+2. Add jest config to `package.json`:
 ```json
-"scripts": {
-  "test": "jest",
-  "start": "node server.js"
-},
 "jest": {
-  "preset": "ts-jest",
   "testEnvironment": "node"
 }
 ```
