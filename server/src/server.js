@@ -5,6 +5,8 @@ import passport from "passport";
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
+import "./config/passport.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Bitewise API is running");
