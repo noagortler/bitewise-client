@@ -90,9 +90,19 @@ Stores each dish entry logged by a user. References both the User and Restaurant
 - `freeFrom` is an array of strings from the fixed allergen list. Users only tag allergens they personally confirmed with restaurant staff, not all allergens the dish may be free from
 - `modifications` is an array of strings selected from a fixed list of chip options: no bun, no cheese, no sauce, no dressing, no butter, no nuts, no croutons, no mayo, no gravy, no garnish, gluten free bun substitution, dairy free substitution
 - `otherModifications` is an optional free text field for modifications not covered by the chip list. UI hints guide users toward brief descriptions (e.g. "no tahini")
-- Dishes with the same `dishName`, `freeFrom`, and `modifications` at the same restaurant are considered the same dish for aggregation purposes. The log count increases rather than creating a new card
 - Multiple dishes can be logged per user per restaurant
 - Only positive, safe experiences are logged, there is no negative review or rating system
+
+---
+
+## Dish Aggregation Approach
+
+Every dish log is stored as its own individual document:
+
+- Each user creates their own Dish document when they log a dish
+- The complete history of all logs is preserved
+- Editing and deleting individual logs is straightforward
+- When displaying dishes on the restaurant page, the backend groups logs by `dishName`, `freeFrom`, and `modifications` to compute a log count
 
 ---
 

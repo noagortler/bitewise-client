@@ -53,6 +53,23 @@ everything we learned throughout the bootcamp.
 
 ---
 
+## MVP vs Stretch Goals
+
+### Must Have
+- User registration and login
+- Interactive map showing nearby restaurants
+- Restaurant page with logged dishes
+- Dish logging with allergen tags and modifications
+- Allergen chip filter on the map
+- User profile with logged dish history
+- Settings (account details, allergens, default location, change password)
+
+### Stretch Goals
+- Favourite restaurants
+- Dish count aggregation ("X people logged this dish")
+
+---
+
 ## Technology Stack
 
 | Layer | Technology |

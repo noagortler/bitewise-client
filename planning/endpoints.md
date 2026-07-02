@@ -537,3 +537,39 @@ This workflow covers how the map populates with restaurant pins when a user open
 **Step 5:** Frontend passes the results to the Google Maps JavaScript API and places a pin on the map for each restaurant.
 
 **Step 6:** If the user toggles the allergen filter, the frontend re-renders the pins to show only restaurants that have at least one dish matching the user's allergen profile.
+
+---
+
+## Google API Error Handling
+
+Because Bitewise depends on Google Maps JavaScript API and Google Places API, the frontend must handle any API failures rather than crashing or showing raw errors.
+
+### Google Places API unavailable or returns no results
+
+Display a message in the search results area:
+
+"We could not find any restaurants matching your search. Please try again."
+
+Do not show a raw error or allow the page to crash.
+
+### Google Maps JavaScript API fails to load
+
+Display a message in place of the map:
+
+"The map is temporarily unavailable. Please try again later."
+
+Provide the city search input and allergen filter as fallbacks so the user is not completely blocked.
+
+### User denies location access
+
+Do not fail or show an error. Fall back to the user's saved default location if one exists, or a hardcoded default location if not. The city search input above the map allows the user to manually set their location at any time.
+
+### Restaurant not found in Google Places
+
+If a search returns no results for a restaurant name, display:
+
+"No restaurants found. Try a different search term."
+
+### General rule
+
+All Google API calls on the frontend should be wrapped in try/catch blocks. Errors should be caught and displayed as user-friendly messages. The application should never crash or show a raw error message to the user.
