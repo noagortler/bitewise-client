@@ -6,37 +6,47 @@
 
 **App name:** Bitewise
 
-The logo is the wordmark "Bitewise" set in Nunito Bold. The wordmark appears in Charcoal Blue on light backgrounds and Old Lace on dark or colored backgrounds.
+The logo is the wordmark "Bitewise" set in Nunito Bold. The wordmark appears in Verdigris 500 on the dark navbar, with the "i" in "wise" rendered in Cerulean 500 as a secondary brand accent. On light backgrounds the wordmark uses Neutral 900.
 
 ---
 
 ## Color Palette
 
-| Name | Hex | Usage |
+Bitewise uses a systematic HSB-based palette with seven color scales, each containing nine shades from 100 (lightest) to 900 (darkest). The 500 value is the base color for each scale.
+
+| Scale | 500 Base | Role |
 |---|---|---|
-| Old Lace | `#FAF3E0` | Page background, toolbar background, form backgrounds |
-| Sandy Brown | `#F4A261` | Navbar background |
-| Verdigris | `#2A9D8F` | Allergen tags, active allergen chips on filter panel, teal map pins, links |
-| Burnt Peach | `#E76F51` | Buttons, map pins (general), date text on cards |
-| Charcoal Blue | `#264653` | All body text, headings, active modification chips, active allergen chips on forms, filled buttons |
+| Verdigris | `#25A691` | Brand primary |
+| Cerulean | `#2481A6` | Brand secondary |
+| Intense Cherry | `#B53339` | Error |
+| Copper | `#B87A33` | Warning |
+| Medium Jungle | `#2EA65A` | Success |
+| Ocean Deep | `#3169A8` | Info |
+| Neutral | `#8FA09E` | Text, backgrounds, borders |
+
+**Full scales:**
+
+| Shade | Verdigris | Cerulean | Intense Cherry | Copper | Medium Jungle | Ocean Deep | Neutral |
+|---|---|---|---|---|---|---|---|
+| 100 | `#F0FAFA` | `#F0F8FA` | `#FDF0F0` | `#FDF6ED` | `#F0FAF3` | `#EFF4FB` | `#F5FAFA` |
+| 200 | `#BDE8E3` | `#BDDAE8` | `#F0BDBD` | `#F0D9B8` | `#BDE8CB` | `#BBCFF0` | `#E0EBEA` |
+| 300 | `#84CECC` | `#84BACE` | `#E08484` | `#E0B87D` | `#84CE9F` | `#84A8E0` | `#C5D6D4` |
+| 400 | `#54BDB1` | `#509EBD` | `#CC5757` | `#CC9854` | `#54BD79` | `#5487CC` | `#AABCBA` |
+| 500 | `#25A691` | `#2481A6` | `#B53339` | `#B87A33` | `#2EA65A` | `#3169A8` | `#8FA09E` |
+| 600 | `#148576` | `#136485` | `#8C2028` | `#8C5A20` | `#1A8542` | `#1D4F85` | `#728180` |
+| 700 | `#09665B` | `#074D66` | `#6B1219` | `#6B4012` | `#0D6630` | `#0E3866` | `#556362` |
+| 800 | `#054840` | `#033547` | `#470A10` | `#472A09` | `#074820` | `#072647` | `#394443` |
+| 900 | `#022E29` | `#01202E` | `#2C050A` | `#2C1A05` | `#032E13` | `#03172C` | `#212828` |
 
 ### Usage rules
 
-- **Old Lace** is the default background for all pages, sidebars, toolbars, and form areas
-- **Sandy Brown** is used exclusively for the navbar
-- **Verdigris** is used for allergen tags on dish cards, the active state of allergen filters, links, and map pins for restaurants matching the user's allergen profile
-- **Burnt Peach** is used for buttons, map pins for general restaurants, and date/last logged text on dish cards
-- **Charcoal Blue** is used for all text throughout the app. It is the only text color used on Sandy Brown, Old Lace, and white backgrounds
-
-### Accessibility
-
-All text uses Charcoal Blue `#264653`. White text is never used on any brand color. The following combinations have been verified to meet WCAG AA contrast requirements:
-
-- Charcoal Blue on Old Lace - passes
-- Charcoal Blue on Sandy Brown - passes
-- Charcoal Blue on white - passes
-- Black on Verdigris - passes
-- Black on Burnt Peach - passes
+- **Neutral 100** is the default background for all pages, sidebars, toolbars, and form areas
+- **Verdigris 900** is used exclusively for the navbar background
+- **Verdigris 500** is used for primary buttons, active allergen chips, matching map pins, and links
+- **Cerulean 500** is used for general map pins and the "i" in the wordmark
+- **Neutral 900** is used for all body text throughout the app. It is the only text color used on light backgrounds and white
+- **Neutral 200** is the default border color. Neutral 300 is used for stronger borders
+- Supporting colors (Intense Cherry, Copper, Medium Jungle, Ocean Deep) are reserved for semantic use only and are never used decoratively
 
 ---
 
@@ -70,31 +80,24 @@ Both fonts are loaded from Google Fonts.
 ### Buttons
 
 **Primary button** (Log a dish, Save Changes, Create account, Log in)
-- Background: Burnt Peach `#E76F51`
-- Text: Charcoal Blue `#264653`, Outfit Medium, 14px
+- Background: Verdigris 500
+- Text: white, Outfit Medium, 14px
 - Border: none
 - Border radius: 8px
 - Height: 40px
 - Full width in modals and forms, auto width in sidebars
 
 **Secondary button** (Cancel, Save restaurant)
-- Background: Old Lace `#FAF3E0`
-- Text: Charcoal Blue `#264653`, Outfit Regular, 14px
-- Border: 0.5px solid, muted warm grey
+- Background: white
+- Text: Neutral 900, Outfit Regular, 14px
+- Border: 0.5px solid Neutral 300
 - Border radius: 8px
 - Height: 40px
 
 **Danger button** (Delete account)
-- Background: Burnt Peach `#E76F51`
-- Text: Charcoal Blue `#264653`, Outfit Medium, 14px
-- Border: none
-- Border radius: 8px
-- Height: 40px
-
-**Filled dark button** (navbar icons active state)
-- Background: Charcoal Blue `#264653`
-- Text: Old Lace `#FAF3E0`, Outfit Medium, 14px
-- Border: none
+- Background: white
+- Text: Intense Cherry 500, Outfit Medium, 14px
+- Border: 0.5px solid Intense Cherry 500
 - Border radius: 8px
 - Height: 40px
 
@@ -103,22 +106,22 @@ Both fonts are loaded from Google Fonts.
 ### Chips
 
 **Allergen chips on forms and filter panel (inactive)**
-- Background: Old Lace `#FAF3E0`
-- Text: Charcoal Blue `#264653`, Outfit Medium, 12px
-- Border: 0.5px solid, muted warm grey
+- Background: Neutral 100
+- Text: Neutral 900, Outfit Medium, 12px
+- Border: 0.5px solid Neutral 300
 - Border radius: 20px
 - Height: 28px
 
 **Allergen chips on forms and filter panel (active/selected)**
-- Background: Charcoal Blue `#264653`
-- Text: Old Lace `#FAF3E0`, Outfit Medium, 12px
+- Background: Verdigris 500
+- Text: white, Outfit Medium, 12px
 - Border: none
 - Border radius: 20px
 - Height: 28px
 
 **Allergen tags on dish cards**
-- Background: Verdigris at low opacity
-- Text: Verdigris `#2A9D8F`, Outfit Medium, 12px
+- Background: Verdigris 100
+- Text: Verdigris 600, Outfit Medium, 12px
 - Border: none
 - Border radius: 20px
 - Height: 24px
@@ -130,65 +133,65 @@ Both fonts are loaded from Google Fonts.
 Dish cards appear on the restaurant page and profile page.
 
 - Background: white
-- Border: 0.5px solid, muted warm grey
+- Border: 0.5px solid Neutral 200
 - Border radius: 12px
 - Padding: 16px
 - Shadow: none
 
 **Card content order:**
-1. Dish name (Nunito Bold, 16px, Charcoal Blue)
+1. Dish name (Nunito Bold, 16px, Neutral 900)
 2. Log count ("X people logged this dish", Outfit Regular, 12px, secondary text)
 3. Allergen tags (Verdigris chips)
 4. Modifications (Outfit Italic, 12px, secondary text). Displays "Modifications: none" when empty
-5. Last logged line (Outfit Regular, 12px, Burnt Peach)
+5. Last logged line (Outfit Regular, 12px, Neutral 600)
 
 ---
 
 ### Inputs
 
 - Background: white
-- Border: 0.5px solid, muted warm grey
+- Border: 0.5px solid Neutral 200, Verdigris 500 when focused
 - Border radius: 8px
 - Height: 36px (text inputs), auto height (textareas)
-- Text: Charcoal Blue `#264653`, Outfit Regular, 14px
-- Placeholder text: lighter warm grey, Outfit Regular, 14px
+- Text: Neutral 900, Outfit Regular, 14px
+- Placeholder text: Neutral 400, Outfit Regular, 14px
 - Padding: 0 12px
 
 ---
 
 ### Navbar
 
-- Background: Sandy Brown `#F4A261`
+- Background: Verdigris 900
 - Height: 56px
-- Logo: Nunito Bold, 20px, Charcoal Blue
-- Search bar: white at 35% opacity background, Outfit Regular, 13px, dark brown text
-- Icon buttons: white at 30% opacity background, Charcoal Blue icons
+- Logo: Nunito Bold, 20px, Verdigris 500 with Cerulean 500 on the "i" in "wise"
+- Search bar: white at 8% opacity background, Outfit Regular, 13px, Neutral 400 text
+- Icon buttons: white at 8% opacity background, Neutral 100 icons
 
 ---
 
 ### Toolbar (map page)
 
-- Background: Old Lace `#FAF3E0`
-- Border bottom: 0.5px solid, muted warm grey
+- Background: Neutral 100
+- Border bottom: 0.5px solid Neutral 200
 - Height: 44px
-- All text and icons: Charcoal Blue `#264653`
-- City button: Old Lace background, Charcoal Blue border, chevron icon to indicate it is interactive
-- Filter panel: dropdown on the right side with checkbox list of user's allergens
+- All text and icons: Neutral 900
+- City button: Neutral 100 background, Neutral 300 border, chevron icon to indicate it is interactive
+- Allergen filter chips sit to the right of the city button
 
 ---
 
 ### Sidebar
 
-- Background: Old Lace `#FAF3E0`
-- Border right: 0.5px solid, muted warm grey
+- Background: Neutral 100
+- Border right: 0.5px solid Neutral 200
 - Width: 260px (restaurant page), 240px (profile page), 200px (settings page)
-- Section labels: Outfit Medium, 11px, uppercase, letter-spacing 0.5px, secondary text color
+- Section labels: Outfit Medium, 11px, uppercase, letter-spacing 0.5px, Neutral 500
 
 ---
 
 ### Map pins
 
-- **Burnt Peach pin**: restaurant has dishes logged but none match the user's active allergen filter
+- **Cerulean pin**: restaurant has dishes logged but none match the user's active allergen filter
 - **Verdigris pin**: restaurant has at least one dish matching the user's active allergen filter
 - Pin shape: teardrop (circle with pointed bottom)
 - Border: 2px solid white
@@ -198,7 +201,7 @@ Dish cards appear on the restaurant page and profile page.
 ### Popup (map pin click)
 
 - Background: white
-- Border: 0.5px solid, muted warm grey
+- Border: 0.5px solid Neutral 200
 - Border radius: 12px
 - Padding: 14px
 - Width: 220px
@@ -233,8 +236,6 @@ Dish cards appear on the restaurant page and profile page.
 
 ## Accessibility
 
-- All text uses Charcoal Blue `#264653` on light backgrounds, verified to meet WCAG AA
-- White text is never used on any brand color
+- All text uses Neutral 900 on light backgrounds, verified to meet WCAG AA
 - Interactive elements (buttons, chips, dropdowns) have visible borders or background changes to indicate state
-- Placeholder text uses a lighter warm grey and is never the only indicator of a field's purpose. All inputs have visible labels
-- Chip active states use a filled dark background (Charcoal Blue) with light text (Old Lace) to clearly communicate selection
+- Placeholder text uses Neutral 400 and is never the only indicator of a field's purpose. All inputs have visible labels
