@@ -6,10 +6,89 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Verdigris - Brand Primary */
+  --verdigris-100: #F0FAFA;
+  --verdigris-200: #BDE8E3;
+  --verdigris-300: #84CECC;
+  --verdigris-400: #54BDB1;
+  --verdigris-500: #25A691;
+  --verdigris-600: #148576;
+  --verdigris-700: #09665B;
+  --verdigris-800: #054840;
+  --verdigris-900: #022E29;
+
+  /* Cerulean - Brand Secondary */
+  --cerulean-100: #F0F8FA;
+  --cerulean-200: #BDDAE8;
+  --cerulean-300: #84BACE;
+  --cerulean-400: #509EBD;
+  --cerulean-500: #2481A6;
+  --cerulean-600: #136485;
+  --cerulean-700: #074D66;
+  --cerulean-800: #033547;
+  --cerulean-900: #01202E;
+
+  /* Intense Cherry - Error */
+  --cherry-100: #FDF0F0;
+  --cherry-200: #F0BDBD;
+  --cherry-300: #E08484;
+  --cherry-400: #CC5757;
+  --cherry-500: #B53339;
+  --cherry-600: #8C2028;
+  --cherry-700: #6B1219;
+  --cherry-800: #470A10;
+  --cherry-900: #2C050A;
+
+  /* Copper - Warning */
+  --copper-100: #FDF6ED;
+  --copper-200: #F0D9B8;
+  --copper-300: #E0B87D;
+  --copper-400: #CC9854;
+  --copper-500: #B87A33;
+  --copper-600: #8C5A20;
+  --copper-700: #6B4012;
+  --copper-800: #472A09;
+  --copper-900: #2C1A05;
+
+  /* Medium Jungle - Success */
+  --jungle-100: #F0FAF3;
+  --jungle-200: #BDE8CB;
+  --jungle-300: #84CE9F;
+  --jungle-400: #54BD79;
+  --jungle-500: #2EA65A;
+  --jungle-600: #1A8542;
+  --jungle-700: #0D6630;
+  --jungle-800: #074820;
+  --jungle-900: #032E13;
+
+  /* Ocean Deep - Info */
+  --ocean-100: #EFF4FB;
+  --ocean-200: #BBCFF0;
+  --ocean-300: #84A8E0;
+  --ocean-400: #5487CC;
+  --ocean-500: #3169A8;
+  --ocean-600: #1D4F85;
+  --ocean-700: #0E3866;
+  --ocean-800: #072647;
+  --ocean-900: #03172C;
+
+  /* Neutral - Teal tint */
+  --neutral-100: #F5FAFA;
+  --neutral-200: #E0EBEA;
+  --neutral-300: #C5D6D4;
+  --neutral-400: #AABCBA;
+  --neutral-500: #8FA09E;
+  --neutral-600: #728180;
+  --neutral-700: #556362;
+  --neutral-800: #394443;
+  --neutral-900: #212828;
+}
+
 body {
   font-family: 'Outfit', sans-serif;
-  background-color: #FAF3E0;
-  color: #264653;
+  background-color: var(--neutral-100);
+  color: var(--neutral-900);
 }
 
 h1, h2, h3, h4, h5, h6 {
