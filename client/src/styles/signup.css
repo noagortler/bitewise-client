@@ -1,0 +1,191 @@
+/* Left Panel */
+.signup-left {
+  width: 50%;
+  background-color: var(--verdigris-900);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+  text-align: center;
+}
+
+/* Step Cards */
+.signup-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 60%;
+  text-align: left;
+  margin-top: 48px;
+}
+
+.signup-step-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.signup-step-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(37, 166, 145, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--verdigris-500);
+}
+
+.signup-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.signup-step-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--verdigris-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.signup-step-text {
+  font-size: 15px;
+  color: var(--neutral-200);
+  line-height: 1.4;
+}
+
+/* Form Elements */
+.signup-name-row {
+  display: flex;
+  gap: 12px;
+}
+
+.signup-name-row .form-group {
+  flex: 1;
+}
+
+.signup-allergen-hint {
+  font-size: 12px;
+  color: var(--neutral-600);
+  margin-bottom: 8px;
+}
+
+/* Allergen Chips */
+.signup-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+}
+
+.chip-inactive {
+  background-color: var(--neutral-100);
+  border: 0.5px solid var(--neutral-300);
+  color: var(--neutral-900);
+}
+
+.chip-active {
+  background-color: var(--verdigris-500);
+  border: none;
+  color: #ffffff;
+}
+
+/* Tablet Portrait */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .signup-left {
+    width: 100%;
+    background-color: var(--neutral-100);
+    padding: 0 0 24px;
+    flex-shrink: 0;
+  }
+
+  .signup-steps {
+    display: none;
+  }
+
+  .auth-card {
+    overflow-y: auto;
+    max-height: calc(100vh - 220px);
+  }
+}
+
+/* Small Landscape Screens */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .signup-steps {
+    width: 70%;
+    margin-top: 24px;
+    gap: 8px;
+  }
+
+  .signup-step-card {
+    padding: 12px 14px;
+  }
+
+  .signup-step-text {
+    font-size: 12px;
+  }
+
+  .signup-step-label {
+    font-size: 10px;
+  }
+
+  .signup-step-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .signup-allergen-hint {
+    margin-bottom: 6px;
+  }
+
+  .signup-chips {
+    gap: 6px;
+  }
+
+  .chip {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+}
+
+/* Mobile Screens */
+@media (max-width: 767px) {
+  .signup-left {
+    width: 100%;
+    background-color: var(--neutral-100);
+    padding: 0 0 24px;
+  }
+
+  .signup-steps {
+    display: none;
+  }
+}
+
+/* Small Mobile Screens */
+@media (max-width: 480px) {
+  .signup-left {
+    padding: 0 0 20px;
+  }
+}
