@@ -112,7 +112,7 @@ function Signup() {
                 type='text'
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                placeholder='Felix'
+                placeholder='First name'
               />
             </div>
             <div className='form-group'>
@@ -122,7 +122,7 @@ function Signup() {
                 type='text'
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                placeholder='Green'
+                placeholder='Last name'
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ function Signup() {
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder='felix@email.com'
+              placeholder='name@email.com'
             />
           </div>
 

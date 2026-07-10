@@ -1,0 +1,75 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  height: 56px;
+  background-color: var(--verdigris-900);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-wordmark {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--verdigris-500);
+  white-space: nowrap;
+}
+
+.navbar-wordmark-i {
+  color: var(--cerulean-500);
+}
+
+/* Search Bar */
+.navbar-search {
+  flex: 1;
+  max-width: 400px;
+}
+
+.navbar-search-input {
+  width: 100%;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  color: var(--neutral-100);
+  outline: none;
+}
+
+.navbar-search-input::placeholder {
+  color: var(--neutral-400);
+}
+
+.navbar-search-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Icon Buttons */
+.navbar-icons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.navbar-icon-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neutral-100);
+  cursor: pointer;
+}
+
+.navbar-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
