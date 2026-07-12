@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { APIProvider, Map as GoogleMap, AdvancedMarker, Pin, useMap } from '@vis.gl/react-google-maps'
+import { APIProvider, Map as GoogleMap, AdvancedMarker, useMap } from '@vis.gl/react-google-maps'
+import { useNavigate } from 'react-router-dom'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 import Navbar from '../components/Navbar'
 import '../styles/map.css'
 
@@ -7,7 +9,16 @@ const allergens = ['Gluten', 'Dairy', 'Eggs', 'Peanuts', 'Tree nuts', 'Soy', 'Se
 
 const fallbackCenter = { lat: 49.2827, lng: -123.1207 }
 
-function MapController({ center }) {
+/* Custom pin using MUI LocationOnIcon for a fully clickable hit area */
+function CustomPin({ color }) {
+  return (
+    <LocationOnIcon
+      style={{ color, fontSize: '40px', display: 'block' }}
+    />
+  )
+}
+
+function MapController({ center, onIdle, onMapReady, selectedRestaurant, onBoundsChanged }) {
   const map = useMap()
 
   useEffect(() => {
@@ -15,6 +26,24 @@ function MapController({ center }) {
       map.panTo(center)
     }
   }, [map, center])
+
+  useEffect(() => {
+    if (!map) return
+    onMapReady(map)
+    const idleListener = map.addListener('idle', () => {
+      const c = map.getCenter()
+      onIdle({ lat: c.lat(), lng: c.lng() })
+    })
+    const boundsListener = map.addListener('bounds_changed', () => {
+      if (selectedRestaurant) {
+        onBoundsChanged(map, selectedRestaurant)
+      }
+    })
+    return () => {
+      idleListener.remove()
+      boundsListener.remove()
+    }
+  }, [map, onIdle, onMapReady, selectedRestaurant, onBoundsChanged])
 
   return null
 }
@@ -29,12 +58,13 @@ function Map() {
   const [searchInput, setSearchInput] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [locationError, setLocationError] = useState('')
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null)
+  const [popupDishes, setPopupDishes] = useState([])
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 })
   const dropdownRef = useRef(null)
   const autocompleteTimer = useRef(null)
-
-  useEffect(() => {
-    fetchRestaurants(mapCenter.lat, mapCenter.lng)
-  }, [mapCenter])
+  const mapRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -71,12 +101,49 @@ function Map() {
             setCityLabel('My location')
           }
         },
-        () => {
-          // if they deny permission, keep fallback center
-        }
+        () => {}
       )
     }
   }, [])
+
+  useEffect(() => {
+    if (!selectedRestaurant) {
+      setPopupDishes([])
+      return
+    }
+    const fetchDishes = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/dishes?restaurantId=${selectedRestaurant._id}`,
+          { credentials: 'include' }
+        )
+        const data = await response.json()
+        if (response.ok) {
+          setPopupDishes(data)
+        }
+      } catch {
+        setPopupDishes([])
+      }
+    }
+    fetchDishes()
+  }, [selectedRestaurant])
+
+  /* Convert lat/lng to pixel position for popup placement */
+  const calculatePopupPosition = (map, restaurant) => {
+    const projection = map.getProjection()
+    const bounds = map.getBounds()
+    if (!projection || !bounds) return
+    const topRight = projection.fromLatLngToPoint(bounds.getNorthEast())
+    const bottomLeft = projection.fromLatLngToPoint(bounds.getSouthWest())
+    const scale = Math.pow(2, map.getZoom())
+    const worldPoint = projection.fromLatLngToPoint({
+      lat: restaurant.location.lat,
+      lng: restaurant.location.lng,
+    })
+    const x = (worldPoint.x - bottomLeft.x) * scale
+    const y = (worldPoint.y - topRight.y) * scale
+    setPopupPosition({ x, y })
+  }
 
   const fetchRestaurants = async (lat, lng) => {
     try {
@@ -90,6 +157,25 @@ function Map() {
       }
     } catch (err) {
       console.error('Failed to fetch restaurants:', err)
+    }
+  }
+
+  const handleMapIdle = (center) => {
+    fetchRestaurants(center.lat, center.lng)
+  }
+
+  const handleMapReady = (map) => {
+    mapRef.current = map
+  }
+
+  const handleBoundsChanged = (map, restaurant) => {
+    calculatePopupPosition(map, restaurant)
+  }
+
+  const handlePinClick = (restaurant) => {
+    setSelectedRestaurant(restaurant)
+    if (mapRef.current) {
+      calculatePopupPosition(mapRef.current, restaurant)
     }
   }
 
@@ -216,6 +302,20 @@ function Map() {
     return restaurant.allergens?.some((a) => activeAllergens.includes(a))
   }
 
+  const getPopupAllergenTags = () => {
+    const allAllergens = new Set()
+    popupDishes.forEach((dish) => {
+      dish.freeFrom.forEach((a) => allAllergens.add(a))
+    })
+    const allergenList = Array.from(allAllergens)
+    const activeLower = activeAllergens.map((f) => f.toLowerCase())
+    const matching = allergenList.filter((a) => activeLower.includes(a.toLowerCase()))
+    const rest = allergenList.filter((a) => !activeLower.includes(a.toLowerCase()))
+    return { matching, rest }
+  }
+
+  const popupTags = selectedRestaurant ? getPopupAllergenTags() : { matching: [], rest: [] }
+
   return (
     <div className='map-page'>
       <Navbar />
@@ -237,16 +337,10 @@ function Map() {
 
           {showDropdown && (
             <div className='city-dropdown'>
-              <button
-                className='city-dropdown-item'
-                onClick={handleUseMyLocation}
-              >
+              <button className='city-dropdown-item' onClick={handleUseMyLocation}>
                 Use my location
               </button>
-              <button
-                className='city-dropdown-item'
-                onClick={() => setShowSearch(true)}
-              >
+              <button className='city-dropdown-item' onClick={() => setShowSearch(true)}>
                 Search city or area
               </button>
               {showSearch && (
@@ -303,8 +397,16 @@ function Map() {
             gestureHandling='greedy'
             disableDefaultUI={true}
             mapId='c686d0ed91a5bdc32e290a5b'
+            onClick={() => setSelectedRestaurant(null)}
           >
-            <MapController center={mapCenter} />
+            <MapController
+              center={mapCenter}
+              onIdle={handleMapIdle}
+              onMapReady={handleMapReady}
+              selectedRestaurant={selectedRestaurant}
+              onBoundsChanged={handleBoundsChanged}
+            />
+
             {restaurants.map((restaurant) => (
               <AdvancedMarker
                 key={restaurant._id}
@@ -312,16 +414,64 @@ function Map() {
                   lat: restaurant.location.lat,
                   lng: restaurant.location.lng,
                 }}
+                onClick={() => handlePinClick(restaurant)}
               >
-                <Pin
-                  background={matchesFilter(restaurant) ? '#25A691' : '#2481A6'}
-                  borderColor={matchesFilter(restaurant) ? '#148576' : '#136485'}
-                  glyphColor='#ffffff'
+                <CustomPin
+                  color={matchesFilter(restaurant) ? '#25A691' : '#2481A6'}
                 />
               </AdvancedMarker>
             ))}
           </GoogleMap>
         </APIProvider>
+
+        {selectedRestaurant && (
+          <div
+            className='map-popup'
+            style={{
+              left: `${popupPosition.x - 110}px`,
+              top: `${popupPosition.y - 200}px`,
+            }}
+          >
+            <button className='map-popup-close' onClick={() => setSelectedRestaurant(null)}>x</button>
+            <p className='map-popup-name'>{selectedRestaurant.name}</p>
+            <p className='map-popup-address'>{selectedRestaurant.address}</p>
+
+            {selectedRestaurant.phone && (
+              <p className='map-popup-detail'>{selectedRestaurant.phone}</p>
+            )}
+
+            {selectedRestaurant.website && (
+              <p
+                className='map-popup-website'
+                onClick={() => window.open(selectedRestaurant.website, '_blank')}
+              >
+                {selectedRestaurant.website}
+              </p>
+            )}
+
+            {(popupTags.matching.length > 0 || popupTags.rest.length > 0) && (
+              <div className='map-popup-tags'>
+                {popupTags.matching.map((a) => (
+                  <span key={a} className='map-popup-tag map-popup-tag-match'>
+                    {a} free
+                  </span>
+                ))}
+                {popupTags.rest.map((a) => (
+                  <span key={a} className='map-popup-tag map-popup-tag-default'>
+                    {a} free
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <button
+              className='map-popup-btn'
+              onClick={() => navigate(`/restaurant/${selectedRestaurant._id}`)}
+            >
+              More info
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

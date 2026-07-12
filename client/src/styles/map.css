@@ -120,7 +120,125 @@
   background-color: var(--neutral-100);
 }
 
+/* Custom Pin */
+.custom-pin {
+  width: 30px;
+  height: 42px;
+  cursor: pointer;
+}
+
+.custom-pin svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Map Popup */
+.map-popup {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 220px;
+  max-width: 280px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+  position: absolute;
+}
+
+.map-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--neutral-600);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.map-popup-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-bottom: 4px;
+  padding-right: 16px;
+}
+
+.map-popup-address {
+  font-size: 12px;
+  color: var(--neutral-600);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.map-popup-detail {
+  font-size: 12px;
+  color: var(--neutral-600);
+  margin-bottom: 4px;
+}
+
+.map-popup-website {
+  font-size: 12px;
+  color: var(--verdigris-500);
+  display: block;
+  margin-bottom: 8px;
+  word-break: break-all;
+  cursor: pointer;
+}
+
+.map-popup-website:hover {
+  text-decoration: underline;
+}
+
+.map-popup-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.map-popup-tag {
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  align-items: center;
+}
+
+.map-popup-tag-match {
+  background-color: var(--verdigris-100);
+  color: var(--verdigris-600);
+}
+
+.map-popup-tag-default {
+  background-color: var(--cerulean-100);
+  color: var(--cerulean-600);
+}
+
+.map-popup-btn {
+  height: 30px;
+  padding: 0 14px;
+  background-color: var(--verdigris-500);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  width: 100%;
+}
+
+.map-popup-btn:hover {
+  background-color: var(--verdigris-600);
+}
+
 /* Map Container */
 .map-container {
   flex: 1;
+  position: relative;
 }
