@@ -186,7 +186,7 @@ function Restaurant() {
                       : 'none'}
                   </p>
                   <p className='dish-last-logged'>
-                    Last logged by: {dish.lastLoggedBy} on: {formatDate(dish.updatedAt)}
+                    Last logged by: {dish.lastLoggedBy} on: {formatDate(dish.lastLoggedAt)}
                   </p>
                 </div>
               ))
