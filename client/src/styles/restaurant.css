@@ -104,6 +104,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
+  width: 100%;
 }
 
 .restaurant-save-btn {
@@ -112,6 +113,7 @@
   justify-content: center;
   gap: 6px;
   height: 44px;
+  width: 100%;
   background-color: #ffffff;
   border: 0.5px solid var(--neutral-300);
   border-radius: 8px;
@@ -151,6 +153,15 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+}
+
+/* Mobile filter dropdown -- hidden on desktop */
+.restaurant-mobile-filter {
+  display: none;
+}
+
+.restaurant-mobile-buttons {
+  display: contents;
 }
 
 .restaurant-dishes {
@@ -227,4 +238,86 @@
   justify-content: center;
   font-size: 14px;
   color: var(--neutral-600);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .restaurant-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .restaurant-layout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .restaurant-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 0.5px solid var(--neutral-200);
+    padding: 20px;
+    gap: 10px;
+    overflow-y: visible;
+  }
+
+  .restaurant-sidebar-divider {
+    display: none;
+  }
+
+  .restaurant-mobile-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .restaurant-mobile-buttons .btn-primary,
+  .restaurant-mobile-buttons .restaurant-save-btn {
+    flex: 1;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .restaurant-main {
+    overflow-y: visible;
+    padding: 20px;
+  }
+
+  .restaurant-chips {
+    display: none;
+  }
+
+  .restaurant-mobile-filter {
+    display: block;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--neutral-200);
+  }
+
+  .restaurant-filter-toggle {
+    width: 100%;
+    height: 40px;
+    background-color: #ffffff;
+    border: 0.5px solid var(--neutral-300);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Outfit', sans-serif;
+    color: var(--neutral-900);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+  }
+
+  .restaurant-filter-dropdown {
+    margin-top: 8px;
+    background: #ffffff;
+    border: 0.5px solid var(--neutral-200);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }

@@ -5,6 +5,8 @@ import PhoneIcon from '@mui/icons-material/Phone'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import AddIcon from '@mui/icons-material/Add'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Navbar from '../components/Navbar'
 import '../styles/restaurant.css'
 
@@ -18,6 +20,7 @@ function Restaurant() {
   const [activeAllergens, setActiveAllergens] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false)
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -138,15 +141,17 @@ function Restaurant() {
 
           <div className='restaurant-sidebar-divider' />
 
-          <button className='btn-primary restaurant-log-btn'>
-            <AddIcon fontSize='small' />
-            Log a dish
-          </button>
+          <div className='restaurant-mobile-buttons'>
+            <button className='btn-primary restaurant-log-btn'>
+              <AddIcon fontSize='small' />
+              Log a dish
+            </button>
 
-          <button className='btn-secondary restaurant-save-btn'>
-            <FavoriteIcon fontSize='small' />
-            Save restaurant
-          </button>
+            <button className='btn-secondary restaurant-save-btn'>
+              <FavoriteIcon fontSize='small' />
+              Save restaurant
+            </button>
+          </div>
         </aside>
 
         <main className='restaurant-main'>
@@ -161,6 +166,36 @@ function Restaurant() {
                 {allergen}
               </button>
             ))}
+          </div>
+
+          <div className='restaurant-mobile-filter'>
+            <button
+              className='restaurant-filter-toggle'
+              onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+            >
+              <span>
+                Filter by allergen
+                {activeAllergens.length > 0 && ` (${activeAllergens.length})`}
+              </span>
+              {showFilterDropdown
+                ? <KeyboardArrowUpIcon fontSize='small' />
+                : <KeyboardArrowDownIcon fontSize='small' />
+              }
+            </button>
+
+            {showFilterDropdown && (
+              <div className='restaurant-filter-dropdown'>
+                {allergens.map((allergen) => (
+                  <button
+                    key={allergen}
+                    className={`chip ${activeAllergens.includes(allergen) ? 'chip-active' : 'chip-inactive'}`}
+                    onClick={() => toggleAllergen(allergen)}
+                  >
+                    {allergen}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className='restaurant-dishes'>
