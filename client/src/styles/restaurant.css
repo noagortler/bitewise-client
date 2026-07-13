@@ -1,0 +1,230 @@
+/* Page Layout */
+.restaurant-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.restaurant-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.restaurant-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background-color: var(--neutral-100);
+  border-right: 0.5px solid var(--neutral-200);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.restaurant-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  color: var(--neutral-600);
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.restaurant-back:hover {
+  color: var(--neutral-900);
+}
+
+.restaurant-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--neutral-900);
+}
+
+.restaurant-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  color: var(--neutral-600);
+}
+
+.restaurant-address:hover span {
+  text-decoration: underline;
+  color: var(--verdigris-500);
+}
+
+.restaurant-detail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--neutral-600);
+}
+
+.restaurant-icon {
+  color: var(--neutral-500);
+  flex-shrink: 0;
+}
+
+.restaurant-website {
+  font-size: 13px;
+  color: var(--verdigris-500);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.restaurant-website:hover {
+  text-decoration: underline;
+}
+
+.restaurant-sidebar-divider {
+  height: 0.5px;
+  background-color: var(--neutral-200);
+  margin: 4px 0;
+}
+
+.restaurant-log-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.restaurant-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  background-color: #ffffff;
+  border: 0.5px solid var(--neutral-300);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  color: var(--neutral-900);
+  cursor: pointer;
+}
+
+.restaurant-save-btn:hover {
+  background-color: var(--neutral-100);
+}
+
+/* Main Content */
+.restaurant-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background-color: var(--neutral-100);
+}
+
+.restaurant-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 0.5px solid var(--neutral-200);
+}
+
+.restaurant-filter-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--neutral-600);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.restaurant-dishes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.restaurant-empty {
+  font-size: 14px;
+  color: var(--neutral-600);
+}
+
+/* Dish Cards */
+.dish-card {
+  background: #ffffff;
+  border: 0.5px solid var(--neutral-200);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.dish-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-bottom: 4px;
+  text-transform: capitalize;
+}
+
+.dish-log-count {
+  font-size: 13px;
+  color: var(--neutral-600);
+  margin-bottom: 10px;
+}
+
+.dish-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.tag {
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  align-items: center;
+  background-color: var(--verdigris-100);
+  color: var(--verdigris-600);
+}
+
+.dish-modifications {
+  font-size: 13px;
+  color: var(--neutral-600);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.dish-last-logged {
+  font-size: 12px;
+  color: var(--cerulean-500);
+}
+
+/* Loading State */
+.restaurant-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--neutral-600);
+}
