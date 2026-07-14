@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import PlaceIcon from '@mui/icons-material/Place'
 import PhoneIcon from '@mui/icons-material/Phone'
@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Navbar from '../components/Navbar'
+import LogDishModal from '../components/LogDishModal'
 import '../styles/restaurant.css'
 
 const allergens = ['Gluten', 'Dairy', 'Eggs', 'Peanuts', 'Tree nuts', 'Soy', 'Sesame', 'Fish', 'Shellfish']
@@ -21,6 +22,24 @@ function Restaurant() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showFilterDropdown, setShowFilterDropdown] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+
+  const fetchDishes = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/dishes?restaurantId=${id}`,
+        { credentials: 'include' }
+      )
+      const data = await response.json()
+      if (response.ok) {
+        setDishes(data)
+      }
+    } catch {
+      setError('Something went wrong')
+    } finally {
+      setLoading(false)
+    }
+  }, [id])
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -40,26 +59,9 @@ function Restaurant() {
       }
     }
 
-    const fetchDishes = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/api/dishes?restaurantId=${id}`,
-          { credentials: 'include' }
-        )
-        const data = await response.json()
-        if (response.ok) {
-          setDishes(data)
-        }
-      } catch {
-        setError('Something went wrong')
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchRestaurant()
     fetchDishes()
-  }, [id])
+  }, [id, fetchDishes])
 
   const toggleAllergen = (allergen) => {
     setActiveAllergens((prev) =>
@@ -142,7 +144,10 @@ function Restaurant() {
           <div className='restaurant-sidebar-divider' />
 
           <div className='restaurant-mobile-buttons'>
-            <button className='btn-primary restaurant-log-btn'>
+            <button
+              className='btn-primary restaurant-log-btn'
+              onClick={() => setShowModal(true)}
+            >
               <AddIcon fontSize='small' />
               Log a dish
             </button>
@@ -230,6 +235,18 @@ function Restaurant() {
         </main>
 
       </div>
+
+      {showModal && (
+        <LogDishModal
+          restaurant={restaurant}
+          onClose={() => setShowModal(false)}
+          onSuccess={() => {
+            setShowModal(false)
+            fetchDishes()
+          }}
+        />
+      )}
+
     </div>
   )
 }
