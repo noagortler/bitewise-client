@@ -1,10 +1,42 @@
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import PersonIcon from '@mui/icons-material/Person'
-import SettingsIcon from '@mui/icons-material/Settings'
 import '../styles/navbar.css'
+import { useAuth } from '../context/AuthContext'
 
 function Navbar({ onSearch }) {
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
+  const [showDropdown, setShowDropdown] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:5000/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+    } catch {
+      console.error('Logout failed')
+    } finally {
+      logout()
+      navigate('/')
+    }
+  }
+
+  const getInitials = () => {
+    if (!user) return ''
+    return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
+  }
 
   return (
     <nav className='navbar'>
@@ -25,13 +57,43 @@ function Navbar({ onSearch }) {
         />
       </div>
 
-      <div className='navbar-icons'>
-        <button className='navbar-icon-btn' onClick={() => navigate('/profile')}>
-          <PersonIcon fontSize='small' />
+      <div className='navbar-avatar-wrapper' ref={dropdownRef}>
+        <button
+          className='navbar-avatar'
+          onClick={() => setShowDropdown(!showDropdown)}
+        >
+          {getInitials()}
         </button>
-        <button className='navbar-icon-btn' onClick={() => navigate('/settings')}>
-          <SettingsIcon fontSize='small' />
-        </button>
+
+        {showDropdown && (
+          <div className='navbar-dropdown'>
+            <button
+              className='navbar-dropdown-item'
+              onClick={() => {
+                setShowDropdown(false)
+                navigate('/profile')
+              }}
+            >
+              Profile
+            </button>
+            <button
+              className='navbar-dropdown-item'
+              onClick={() => {
+                setShowDropdown(false)
+                navigate('/settings')
+              }}
+            >
+              Settings
+            </button>
+            <div className='navbar-dropdown-divider' />
+            <button
+              className='navbar-dropdown-item navbar-dropdown-logout'
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   )
