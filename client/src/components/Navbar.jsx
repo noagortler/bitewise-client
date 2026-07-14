@@ -8,7 +8,7 @@ function Navbar({ onSearch }) {
 
   return (
     <nav className='navbar'>
-      <span className='navbar-wordmark'>
+      <span className='navbar-wordmark' onClick={() => navigate('/map')}>
         Bitew<span className='navbar-wordmark-i'>i</span>se
       </span>
 

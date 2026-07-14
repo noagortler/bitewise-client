@@ -17,6 +17,7 @@
   font-weight: 700;
   color: var(--verdigris-500);
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .navbar-wordmark-i {

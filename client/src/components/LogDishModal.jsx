@@ -173,7 +173,7 @@ function LogDishModal({ restaurant, onClose, onSuccess }) {
             onClick={handleSubmit}
             disabled={loading}
           >
-            {loading ? 'Logging...' : 'Log a dish'}
+            {loading ? 'Logging...' : 'Log dish'}
           </button>
         </div>
 
