@@ -273,3 +273,29 @@
 .dish-action-delete:hover {
   color: var(--cherry-500);
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .profile-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .profile-layout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 0.5px solid var(--neutral-200);
+    overflow-y: visible;
+  }
+
+  .profile-main {
+    overflow-y: visible;
+    padding: 20px;
+  }
+}
