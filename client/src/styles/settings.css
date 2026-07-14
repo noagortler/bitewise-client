@@ -1,0 +1,217 @@
+/* Page Layout */
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.settings-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.settings-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background-color: var(--neutral-100);
+  border-right: 0.5px solid var(--neutral-200);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-family: 'Outfit', sans-serif;
+  color: var(--neutral-700);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.settings-nav-item:hover {
+  background-color: var(--neutral-200);
+}
+
+.settings-nav-item-active {
+  background-color: var(--verdigris-100);
+  color: var(--verdigris-700);
+  font-weight: 500;
+}
+
+/* Main Content */
+.settings-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+  background-color: var(--neutral-100);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-section-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--neutral-900);
+}
+
+/* Cards */
+.settings-card {
+  background: #ffffff;
+  border: 0.5px solid var(--neutral-200);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 600px;
+}
+
+.settings-card-danger {
+  border-color: var(--cherry-200);
+}
+
+.settings-card-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--neutral-900);
+}
+
+.settings-card-subtitle {
+  font-size: 13px;
+  color: var(--neutral-600);
+  margin-top: -8px;
+}
+
+.settings-name-row {
+  display: flex;
+  gap: 12px;
+}
+
+.settings-name-row .form-group {
+  flex: 1;
+}
+
+.settings-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.settings-save-btn {
+  align-self: flex-start;
+  height: 40px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+.settings-error {
+  font-size: 13px;
+  color: var(--cherry-500);
+}
+
+.settings-success {
+  font-size: 13px;
+  color: var(--jungle-500);
+}
+
+/* Danger Button */
+.btn-danger {
+  height: 40px;
+  padding: 0 20px;
+  background-color: var(--cherry-500);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background-color: var(--cherry-600);
+}
+
+/* Location Autocomplete */
+.settings-location-wrapper {
+  position: relative;
+}
+
+.settings-location-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 0.5px solid var(--neutral-200);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.settings-location-suggestion-item {
+  padding: 10px 16px;
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  color: var(--neutral-900);
+  cursor: pointer;
+}
+
+.settings-location-suggestion-item:hover {
+  background-color: var(--neutral-100);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .settings-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .settings-layout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .settings-sidebar {
+    display: none;
+  }
+
+  .settings-main {
+    padding: 20px;
+  }
+
+  .settings-name-row {
+    flex-direction: column;
+  }
+
+  .settings-card {
+    max-width: 100%;
+  }
+}
