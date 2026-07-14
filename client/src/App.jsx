@@ -5,6 +5,7 @@ import Map from './pages/Map'
 import Restaurant from './pages/Restaurant'
 import Profile from './pages/Profile'
 import Settings from './pages/Settings'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
@@ -13,10 +14,10 @@ function App() {
         <Route path='/' element={<Login />} />
         <Route path='/login' element={<Navigate to='/' />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/map' element={<Map />} />
-        <Route path='/restaurant/:id' element={<Restaurant />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/settings' element={<Settings />} />
+        <Route path='/map' element={<ProtectedRoute><Map /></ProtectedRoute>} />
+        <Route path='/restaurant/:id' element={<ProtectedRoute><Restaurant /></ProtectedRoute>} />
+        <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
