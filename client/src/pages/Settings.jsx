@@ -69,7 +69,7 @@ function Settings() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/users/${user._id}`,
+        `http://localhost:5000/api/users/${user._id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -98,7 +98,7 @@ function Settings() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/password`,
+        'http://localhost:5000/api/auth/password',
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -137,7 +137,7 @@ function Settings() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/users/${user._id}`,
+        `http://localhost:5000/api/users/${user._id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -167,7 +167,7 @@ function Settings() {
     }
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/geocode/autocomplete?input=${encodeURIComponent(input)}`,
+        `http://localhost:5000/api/geocode/autocomplete?input=${encodeURIComponent(input)}`,
         { credentials: 'include' }
       )
       const data = await response.json()
@@ -201,7 +201,7 @@ function Settings() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/users/${user._id}`,
+        `http://localhost:5000/api/users/${user._id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -232,7 +232,7 @@ function Settings() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/users/${user._id}`,
+        `http://localhost:5000/api/users/${user._id}`,
         {
           method: 'DELETE',
           credentials: 'include',
