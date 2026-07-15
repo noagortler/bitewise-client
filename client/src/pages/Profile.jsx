@@ -111,16 +111,18 @@ function Profile() {
     return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
   }
 
-  const getModificationsText = (dish) => {
-    const mods = []
-    if (dish.modifications?.length > 0) {
-      mods.push(...dish.modifications)
-    }
-    if (dish.otherModifications) {
-      mods.push(dish.otherModifications)
-    }
-    return mods.length > 0 ? mods.join(', ') : 'none'
+const getModificationsText = (dish) => {
+  const mods = []
+  if (dish.modifications?.length > 0) {
+    mods.push(...dish.modifications)
   }
+  if (dish.otherModifications) {
+    mods.push(dish.otherModifications)
+  }
+  return mods.length > 0
+    ? mods.map((m) => m.charAt(0).toUpperCase() + m.slice(1)).join(', ')
+    : 'none'
+}
 
   return (
     <div className='profile-page'>

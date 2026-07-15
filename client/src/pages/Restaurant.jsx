@@ -82,6 +82,19 @@ function Restaurant() {
     return new Date(dateString).toLocaleDateString('en-CA')
   }
 
+const getModificationsText = (dish) => {
+  const mods = []
+  if (dish.modifications?.length > 0) {
+    mods.push(...dish.modifications)
+  }
+  if (dish.otherModifications) {
+    mods.push(dish.otherModifications)
+  }
+  return mods.length > 0
+    ? mods.map((m) => m.charAt(0).toUpperCase() + m.slice(1)).join(', ')
+    : 'none'
+}
+
   const handleAddressClick = () => {
     window.open(
       `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`,
@@ -221,9 +234,7 @@ function Restaurant() {
                     ))}
                   </div>
                   <p className='dish-modifications'>
-                    Modifications: {dish.modifications.length > 0
-                      ? dish.modifications.join(', ')
-                      : 'none'}
+                    Modifications: {getModificationsText(dish)}
                   </p>
                   <p className='dish-last-logged'>
                     Last logged by: {dish.lastLoggedBy} on: {formatDate(dish.lastLoggedAt)}

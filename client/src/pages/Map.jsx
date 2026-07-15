@@ -302,17 +302,20 @@ function Map() {
     return restaurant.allergens?.some((a) => activeAllergens.includes(a))
   }
 
-  const getPopupAllergenTags = () => {
-    const allAllergens = new Set()
-    popupDishes.forEach((dish) => {
-      dish.freeFrom.forEach((a) => allAllergens.add(a))
-    })
-    const allergenList = Array.from(allAllergens)
-    const activeLower = activeAllergens.map((f) => f.toLowerCase())
-    const matching = allergenList.filter((a) => activeLower.includes(a.toLowerCase()))
-    const rest = allergenList.filter((a) => !activeLower.includes(a.toLowerCase()))
-    return { matching, rest }
-  }
+const getPopupAllergenTags = () => {
+  if (activeAllergens.length === 0) return { matching: [], rest: [] }
+
+  const allAllergens = new Set()
+  popupDishes.forEach((dish) => {
+    dish.freeFrom.forEach((a) => allAllergens.add(a))
+  })
+
+  const allergenList = Array.from(allAllergens)
+  const activeLower = activeAllergens.map((f) => f.toLowerCase())
+  const matching = allergenList.filter((a) => activeLower.includes(a.toLowerCase()))
+
+  return { matching, rest: [] }
+}
 
   const popupTags = selectedRestaurant ? getPopupAllergenTags() : { matching: [], rest: [] }
 
@@ -417,7 +420,7 @@ function Map() {
                 onClick={() => handlePinClick(restaurant)}
               >
                 <CustomPin
-                  color={matchesFilter(restaurant) ? '#25A691' : '#2481A6'}
+                  color='#25A691'
                 />
               </AdvancedMarker>
             ))}
