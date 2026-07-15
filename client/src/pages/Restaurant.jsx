@@ -27,7 +27,7 @@ function Restaurant() {
   const fetchDishes = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/dishes?restaurantId=${id}`,
+        `${import.meta.env.VITE_API_URL}/api/dishes?restaurantId=${id}`,
         { credentials: 'include' }
       )
       const data = await response.json()
@@ -45,7 +45,7 @@ function Restaurant() {
     const fetchRestaurant = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/restaurants/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/restaurants/${id}`,
           { credentials: 'include' }
         )
         const data = await response.json()
