@@ -25,7 +25,7 @@ function Profile() {
     const fetchDishes = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/dishes?userId=${user._id}`,
+          `${import.meta.env.VITE_API_URL}/api/dishes?userId=${user._id}`,
           { credentials: 'include' }
         )
         const data = await response.json()
@@ -58,7 +58,7 @@ function Profile() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/${user._id}`,
+        `${import.meta.env.VITE_API_URL}/api/users/${user._id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -88,7 +88,7 @@ function Profile() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/dishes/${dishId}`,
+        `${import.meta.env.VITE_API_URL}/api/dishes/${dishId}`,
         {
           method: 'DELETE',
           credentials: 'include',

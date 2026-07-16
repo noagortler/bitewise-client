@@ -88,7 +88,7 @@ function Map() {
           setMapCenter({ lat: latitude, lng: longitude })
           try {
             const response = await fetch(
-              `http://localhost:5000/api/geocode/reverse?lat=${latitude}&lng=${longitude}`,
+              `${import.meta.env.VITE_API_URL}/api/geocode/reverse?lat=${latitude}&lng=${longitude}`,
               { credentials: 'include' }
             )
             const data = await response.json()
@@ -114,7 +114,7 @@ function Map() {
     const fetchDishes = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/dishes?restaurantId=${selectedRestaurant._id}`,
+          `${import.meta.env.VITE_API_URL}/api/dishes?restaurantId=${selectedRestaurant._id}`,
           { credentials: 'include' }
         )
         const data = await response.json()
@@ -148,7 +148,7 @@ function Map() {
   const fetchRestaurants = async (lat, lng) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/restaurants?lat=${lat}&lng=${lng}&radius=10000`,
+        `${import.meta.env.VITE_API_URL}/api/restaurants?lat=${lat}&lng=${lng}&radius=10000`,
         { credentials: 'include' }
       )
       const data = await response.json()
@@ -193,7 +193,7 @@ function Map() {
         setLocationError('')
         try {
           const response = await fetch(
-            `http://localhost:5000/api/geocode/reverse?lat=${latitude}&lng=${longitude}`,
+            `${import.meta.env.VITE_API_URL}/api/geocode/reverse?lat=${latitude}&lng=${longitude}`,
             { credentials: 'include' }
           )
           const data = await response.json()
@@ -219,7 +219,7 @@ function Map() {
     }
     try {
       const response = await fetch(
-        `http://localhost:5000/api/geocode/autocomplete?input=${encodeURIComponent(input)}`,
+        `${import.meta.env.VITE_API_URL}/api/geocode/autocomplete?input=${encodeURIComponent(input)}`,
         { credentials: 'include' }
       )
       const data = await response.json()
@@ -243,7 +243,7 @@ function Map() {
   const handleSuggestionClick = async (suggestion) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/geocode?address=${encodeURIComponent(suggestion.description)}`,
+        `${import.meta.env.VITE_API_URL}/api/geocode?address=${encodeURIComponent(suggestion.description)}`,
         { credentials: 'include' }
       )
       const data = await response.json()
@@ -267,7 +267,7 @@ function Map() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/geocode?address=${encodeURIComponent(searchInput)}`,
+        `${import.meta.env.VITE_API_URL}/api/geocode?address=${encodeURIComponent(searchInput)}`,
         { credentials: 'include' }
       )
       const data = await response.json()
