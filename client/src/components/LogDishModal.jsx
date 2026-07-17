@@ -82,7 +82,7 @@ function LogDishModal({ restaurant, onClose, onSuccess }) {
         return
       }
 
-      onSuccess()
+      onSuccess(data)
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
