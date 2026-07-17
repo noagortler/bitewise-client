@@ -199,14 +199,39 @@ function Settings() {
     setLocationError('')
     setLocationSuccess(false)
 
+    if (!location.trim()) {
+      setLocationError('Please enter a city')
+      return
+    }
+
     try {
+      // The schema stores coordinates, not a city name, so geocode the city
+      // first. The lat/lng is what the rest of the app (like restaurant
+      // search biasing) actually uses.
+      const geocodeResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/geocode?address=${encodeURIComponent(location.trim())}`,
+        { credentials: 'include' }
+      )
+      const geocodeData = await geocodeResponse.json()
+
+      if (!geocodeResponse.ok) {
+        setLocationError(geocodeData.message || 'City not found')
+        return
+      }
+
+      const newDefaultLocation = {
+        city: location.trim(),
+        lat: geocodeData.lat,
+        lng: geocodeData.lng,
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/${user._id}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({ defaultLocation: { city: location } }),
+          body: JSON.stringify({ defaultLocation: newDefaultLocation }),
         }
       )
       const data = await response.json()
@@ -216,7 +241,7 @@ function Settings() {
         return
       }
 
-      login({ ...user, defaultLocation: { city: location } })
+      login({ ...user, defaultLocation: newDefaultLocation })
       setLocationSuccess(true)
       setTimeout(() => setLocationSuccess(false), 3000)
     } catch {
