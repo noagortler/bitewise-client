@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Navbar from '../components/Navbar'
+import EditDishModal from '../components/EditDishModal'
 import { useAuth } from '../context/AuthContext'
 import '../styles/profile.css'
 
@@ -100,6 +101,15 @@ function Profile() {
     } catch {
       console.error('Failed to delete dish')
     }
+  }
+
+  const handleEditDishSuccess = (updatedDish) => {
+    setDishes((prev) =>
+      prev.map((d) =>
+        d._id === updatedDish._id ? { ...d, ...updatedDish } : d
+      )
+    )
+    setEditingDish(null)
   }
 
   const formatDate = (dateString) => {
@@ -247,7 +257,7 @@ const getModificationsText = (dish) => {
                     <div className='dish-card-actions'>
                       <button
                         className='dish-action-btn'
-                        onClick={() => setEditingDish(dish._id)}
+                        onClick={() => setEditingDish(dish)}
                       >
                         <EditIcon style={{ fontSize: '16px' }} />
                       </button>
@@ -288,6 +298,14 @@ const getModificationsText = (dish) => {
         </main>
 
       </div>
+
+      {editingDish && (
+        <EditDishModal
+          dish={editingDish}
+          onClose={() => setEditingDish(null)}
+          onSuccess={handleEditDishSuccess}
+        />
+      )}
     </div>
   )
 }
