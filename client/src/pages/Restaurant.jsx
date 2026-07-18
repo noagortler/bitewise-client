@@ -4,11 +4,13 @@ import PlaceIcon from '@mui/icons-material/Place'
 import PhoneIcon from '@mui/icons-material/Phone'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import AddIcon from '@mui/icons-material/Add'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Navbar from '../components/Navbar'
 import LogDishModal from '../components/LogDishModal'
+import { useAuth } from '../context/AuthContext'
 import '../styles/restaurant.css'
 
 const allergens = ['Gluten', 'Dairy', 'Eggs', 'Peanuts', 'Tree nuts', 'Soy', 'Sesame', 'Fish', 'Shellfish']
@@ -16,6 +18,7 @@ const allergens = ['Gluten', 'Dairy', 'Eggs', 'Peanuts', 'Tree nuts', 'Soy', 'Se
 function Restaurant() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user, login } = useAuth()
   const [restaurant, setRestaurant] = useState(null)
   const [dishes, setDishes] = useState([])
   const [activeAllergens, setActiveAllergens] = useState([])
@@ -23,6 +26,13 @@ function Restaurant() {
   const [error, setError] = useState('')
   const [showFilterDropdown, setShowFilterDropdown] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const [saving, setSaving] = useState(false)
+
+  // Favourites can be populated objects or plain ids depending on where the
+  // user object came from, so check both shapes
+  const isSaved = user?.favourites?.some(
+    (fav) => (fav._id || fav).toString() === id
+  )
 
   const fetchDishes = useCallback(async () => {
     try {
@@ -62,6 +72,30 @@ function Restaurant() {
     fetchRestaurant()
     fetchDishes()
   }, [id, fetchDishes])
+
+  const handleToggleSave = async () => {
+    if (saving || !user) return
+    setSaving(true)
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users/${user._id}/favourites/${id}`,
+        {
+          method: isSaved ? 'DELETE' : 'POST',
+          credentials: 'include',
+        }
+      )
+      const data = await response.json()
+
+      if (response.ok) {
+        login({ ...user, favourites: data.favourites })
+      }
+    } catch {
+      console.error('Failed to update saved restaurants')
+    } finally {
+      setSaving(false)
+    }
+  }
 
   const toggleAllergen = (allergen) => {
     setActiveAllergens((prev) =>
@@ -165,9 +199,17 @@ const getModificationsText = (dish) => {
               Log a dish
             </button>
 
-            <button className='btn-secondary restaurant-save-btn'>
-              <FavoriteIcon fontSize='small' />
-              Save restaurant
+            <button
+              className='btn-secondary restaurant-save-btn'
+              onClick={handleToggleSave}
+              disabled={saving}
+            >
+              {isSaved ? (
+                <FavoriteIcon fontSize='small' style={{ color: 'var(--cherry-400)' }} />
+              ) : (
+                <FavoriteBorderIcon fontSize='small' />
+              )}
+              {isSaved ? 'Saved' : 'Save restaurant'}
             </button>
           </div>
         </aside>
