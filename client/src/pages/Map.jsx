@@ -9,6 +9,18 @@ const allergens = ['Gluten', 'Dairy', 'Eggs', 'Peanuts', 'Tree nuts', 'Soy', 'Se
 
 const fallbackCenter = { lat: 49.2827, lng: -123.1207 }
 
+/* Read the last saved map position for this browser session, if any.
+   sessionStorage clears when the tab closes, so a fresh visit always
+   starts at the user's location instead of wherever they last panned. */
+const getSavedMapPosition = () => {
+  try {
+    const saved = sessionStorage.getItem('bitewise-map-position')
+    return saved ? JSON.parse(saved) : null
+  } catch {
+    return null
+  }
+}
+
 /* Custom pin using MUI LocationOnIcon for a fully clickable hit area */
 function CustomPin({ color }) {
   return (
@@ -49,10 +61,14 @@ function MapController({ center, onIdle, onMapReady, selectedRestaurant, onBound
 }
 
 function Map() {
+  const savedPosition = getSavedMapPosition()
+
   const [activeAllergens, setActiveAllergens] = useState([])
   const [restaurants, setRestaurants] = useState([])
-  const [mapCenter, setMapCenter] = useState(fallbackCenter)
-  const [cityLabel, setCityLabel] = useState('Vancouver, BC')
+  const [mapCenter, setMapCenter] = useState(
+    savedPosition ? { lat: savedPosition.lat, lng: savedPosition.lng } : fallbackCenter
+  )
+  const [cityLabel, setCityLabel] = useState(savedPosition?.cityLabel || 'Vancouver, BC')
   const [showDropdown, setShowDropdown] = useState(false)
   const [showSearch, setShowSearch] = useState(false)
   const [searchInput, setSearchInput] = useState('')
@@ -81,6 +97,10 @@ function Map() {
   }, [])
 
   useEffect(() => {
+    // If we restored a saved position, don't let geolocation override it -
+    // the user should come back to wherever they last were on the map
+    if (getSavedMapPosition()) return
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -162,6 +182,23 @@ function Map() {
 
   const handleMapIdle = (center) => {
     fetchRestaurants(center.lat, center.lng)
+
+    // Save the current position so navigating away (e.g. to a restaurant
+    // page) and coming back returns the user to the same spot
+    try {
+      sessionStorage.setItem(
+        'bitewise-map-position',
+        JSON.stringify({
+          lat: center.lat,
+          lng: center.lng,
+          zoom: mapRef.current ? mapRef.current.getZoom() : 13,
+          cityLabel,
+        })
+      )
+    } catch {
+      // Saving the position is a convenience - if storage fails, the map
+      // still works, so there is nothing to handle here
+    }
   }
 
   const handleMapReady = (map) => {
@@ -395,8 +432,8 @@ const getPopupAllergenTags = () => {
       <div className='map-container'>
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
           <GoogleMap
-            defaultCenter={fallbackCenter}
-            defaultZoom={13}
+            defaultCenter={savedPosition ? { lat: savedPosition.lat, lng: savedPosition.lng } : fallbackCenter}
+            defaultZoom={savedPosition?.zoom || 13}
             gestureHandling='greedy'
             disableDefaultUI={true}
             mapId='c686d0ed91a5bdc32e290a5b'
