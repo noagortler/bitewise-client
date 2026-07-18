@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import '../styles/auth.css'
 
@@ -7,8 +7,18 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const { login } = useAuth()
+  const { user, loading, login } = useAuth()
   const navigate = useNavigate()
+
+  // If the user already has a valid session (e.g. opening the app in a new
+  // tab while logged in), skip the login form and go straight to the map
+  if (loading) {
+    return <div />
+  }
+
+  if (user) {
+    return <Navigate to='/map' />
+  }
 
   const handleSubmit = async () => {
     setError('')
