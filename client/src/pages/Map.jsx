@@ -44,7 +44,18 @@ function MapController({ center, onIdle, onMapReady, selectedRestaurant, onBound
     onMapReady(map)
     const idleListener = map.addListener('idle', () => {
       const c = map.getCenter()
-      onIdle({ lat: c.lat(), lng: c.lng() })
+      const b = map.getBounds()
+      onIdle({
+        center: { lat: c.lat(), lng: c.lng() },
+        bounds: b
+          ? {
+              north: b.getNorthEast().lat(),
+              east: b.getNorthEast().lng(),
+              south: b.getSouthWest().lat(),
+              west: b.getSouthWest().lng(),
+            }
+          : null,
+      })
     })
     const boundsListener = map.addListener('bounds_changed', () => {
       if (selectedRestaurant) {
@@ -165,10 +176,10 @@ function Map() {
     setPopupPosition({ x, y })
   }
 
-  const fetchRestaurants = async (lat, lng) => {
+  const fetchRestaurants = async (bounds) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/restaurants?lat=${lat}&lng=${lng}&radius=10000`,
+        `${import.meta.env.VITE_API_URL}/api/restaurants?north=${bounds.north}&south=${bounds.south}&east=${bounds.east}&west=${bounds.west}`,
         { credentials: 'include' }
       )
       const data = await response.json()
@@ -180,8 +191,12 @@ function Map() {
     }
   }
 
-  const handleMapIdle = (center) => {
-    fetchRestaurants(center.lat, center.lng)
+  const handleMapIdle = ({ center, bounds }) => {
+    // Fetch whatever is visible on screen, so pins cover the whole viewport
+    // at any zoom level instead of a fixed radius around the center
+    if (bounds) {
+      fetchRestaurants(bounds)
+    }
 
     // Save the current position so navigating away (e.g. to a restaurant
     // page) and coming back returns the user to the same spot
@@ -336,7 +351,14 @@ function Map() {
 
   const matchesFilter = (restaurant) => {
     if (activeAllergens.length === 0) return true
-    return restaurant.allergens?.some((a) => activeAllergens.includes(a))
+    const activeLower = activeAllergens.map((a) => a.toLowerCase())
+    return restaurant.allergens?.some((a) => activeLower.includes(a.toLowerCase()))
+  }
+
+  // Verdigris for matches (or when no filter is active), cerulean for
+  // restaurants with no dishes free from the selected allergens
+  const getPinColor = (restaurant) => {
+    return matchesFilter(restaurant) ? '#25A691' : 'var(--cerulean-500)'
   }
 
 const getPopupAllergenTags = () => {
@@ -457,7 +479,7 @@ const getPopupAllergenTags = () => {
                 onClick={() => handlePinClick(restaurant)}
               >
                 <CustomPin
-                  color='#25A691'
+                  color={getPinColor(restaurant)}
                 />
               </AdvancedMarker>
             ))}
