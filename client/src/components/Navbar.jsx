@@ -49,9 +49,23 @@ function Navbar({ onSearch }) {
 
     const timer = setTimeout(async () => {
       try {
-        const biasParams = user?.defaultLocation?.lat
-          ? `&lat=${user.defaultLocation.lat}&lng=${user.defaultLocation.lng}`
-          : ''
+        // Bias results to wherever the user currently is on the map, so
+        // searching while browsing Vancouver returns Vancouver results even
+        // if their saved default is elsewhere. Falls back to their saved
+        // default location if they haven't moved the map this session.
+        let biasParams = ''
+        try {
+          const savedMap = JSON.parse(sessionStorage.getItem('bitewise-map-position'))
+          if (savedMap?.lat) {
+            biasParams = `&lat=${savedMap.lat}&lng=${savedMap.lng}`
+          }
+        } catch {
+          biasParams = ''
+        }
+        if (!biasParams && user?.defaultLocation?.lat) {
+          biasParams = `&lat=${user.defaultLocation.lat}&lng=${user.defaultLocation.lng}`
+        }
+
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/restaurants/search?query=${encodeURIComponent(queryAtRequestTime)}${biasParams}`,
           { credentials: 'include' }
