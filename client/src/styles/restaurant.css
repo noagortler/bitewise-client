@@ -218,6 +218,11 @@
   color: var(--verdigris-600);
 }
 
+.dish-card-match {
+  border-color: var(--verdigris-500);
+  box-shadow: 0 0 0 1px var(--verdigris-500);
+}
+
 .dish-modifications {
   font-size: 13px;
   color: var(--neutral-600);

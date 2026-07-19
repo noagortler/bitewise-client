@@ -21,7 +21,12 @@ function Restaurant() {
   const { user, login } = useAuth()
   const [restaurant, setRestaurant] = useState(null)
   const [dishes, setDishes] = useState([])
-  const [activeAllergens, setActiveAllergens] = useState([])
+  // Start with the user's saved profile allergens pre-selected, mapped back
+  // to the capitalized chip labels (allergens are stored lowercase). They
+  // can still be toggled off - this is a default, not a lock.
+  const [activeAllergens, setActiveAllergens] = useState(() =>
+    allergens.filter((a) => user?.allergens?.includes(a.toLowerCase()))
+  )
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showFilterDropdown, setShowFilterDropdown] = useState(false)
@@ -105,12 +110,18 @@ function Restaurant() {
     )
   }
 
-  const filteredDishes = dishes.filter((dish) => {
-    if (activeAllergens.length === 0) return true
+  // Dishes are never hidden by the filter - matching dishes sort to the
+  // top and get a highlight outline instead
+  const matchesFilters = (dish) => {
+    if (activeAllergens.length === 0) return false
     return activeAllergens.every((a) =>
       dish.freeFrom.includes(a.toLowerCase())
     )
-  })
+  }
+
+  const sortedDishes = [...dishes].sort(
+    (a, b) => Number(matchesFilters(b)) - Number(matchesFilters(a))
+  )
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-CA')
@@ -259,11 +270,14 @@ const getModificationsText = (dish) => {
           </div>
 
           <div className='restaurant-dishes'>
-            {filteredDishes.length === 0 ? (
+            {sortedDishes.length === 0 ? (
               <p className='restaurant-empty'>No dishes logged yet.</p>
             ) : (
-              filteredDishes.map((dish) => (
-                <div key={dish._id} className='dish-card'>
+              sortedDishes.map((dish) => (
+                <div
+                  key={dish._id}
+                  className={`dish-card ${matchesFilters(dish) ? 'dish-card-match' : ''}`}
+                >
                   <h3 className='dish-name'>{dish.dishName}</h3>
                   <p className='dish-log-count'>
                     {dish.logCount} {dish.logCount === 1 ? 'person' : 'people'} logged this dish
