@@ -31,6 +31,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    // Clear the session map position so the next login starts at the default location
+    sessionStorage.removeItem('bitewise-map-position');
   };
 
   return (

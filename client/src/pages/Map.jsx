@@ -3,15 +3,14 @@ import { APIProvider, Map as GoogleMap, AdvancedMarker, useMap } from '@vis.gl/r
 import { useNavigate } from 'react-router-dom'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import Navbar from '../components/Navbar'
+import { useAuth } from '../context/AuthContext'
 import '../styles/map.css'
 
 const allergens = ['Gluten', 'Dairy', 'Eggs', 'Peanuts', 'Tree nuts', 'Soy', 'Sesame', 'Fish', 'Shellfish']
 
 const fallbackCenter = { lat: 49.2827, lng: -123.1207 }
 
-/* Read the last saved map position for this browser session, if any.
-   sessionStorage clears when the tab closes, so a fresh visit always
-   starts at the user's location instead of wherever they last panned. */
+/* Last saved map position for this browser session, if any */
 const getSavedMapPosition = () => {
   try {
     const saved = sessionStorage.getItem('bitewise-map-position')
@@ -30,7 +29,7 @@ function CustomPin({ color }) {
   )
 }
 
-function MapController({ center, onIdle, onMapReady, selectedRestaurant, onBoundsChanged }) {
+function MapController({ center, onIdle, onMapReady }) {
   const map = useMap()
 
   useEffect(() => {
@@ -57,29 +56,32 @@ function MapController({ center, onIdle, onMapReady, selectedRestaurant, onBound
           : null,
       })
     })
-    const boundsListener = map.addListener('bounds_changed', () => {
-      if (selectedRestaurant) {
-        onBoundsChanged(map, selectedRestaurant)
-      }
-    })
     return () => {
       idleListener.remove()
-      boundsListener.remove()
     }
-  }, [map, onIdle, onMapReady, selectedRestaurant, onBoundsChanged])
+  }, [map, onIdle, onMapReady])
 
   return null
 }
 
 function Map() {
   const savedPosition = getSavedMapPosition()
+  const { user } = useAuth()
 
-  const [activeAllergens, setActiveAllergens] = useState([])
-  const [restaurants, setRestaurants] = useState([])
-  const [mapCenter, setMapCenter] = useState(
-    savedPosition ? { lat: savedPosition.lat, lng: savedPosition.lng } : fallbackCenter
+  const [activeAllergens, setActiveAllergens] = useState(() =>
+    allergens.filter((a) => user?.allergens?.includes(a.toLowerCase()))
   )
-  const [cityLabel, setCityLabel] = useState(savedPosition?.cityLabel || 'Vancouver, BC')
+  const [restaurants, setRestaurants] = useState([])
+  const [mapCenter, setMapCenter] = useState(() => {
+    if (savedPosition) return { lat: savedPosition.lat, lng: savedPosition.lng }
+    if (user?.defaultLocation?.lat) {
+      return { lat: user.defaultLocation.lat, lng: user.defaultLocation.lng }
+    }
+    return fallbackCenter
+  })
+  const [cityLabel, setCityLabel] = useState(
+    savedPosition?.cityLabel || user?.defaultLocation?.city || 'Vancouver, BC'
+  )
   const [showDropdown, setShowDropdown] = useState(false)
   const [showSearch, setShowSearch] = useState(false)
   const [searchInput, setSearchInput] = useState('')
@@ -87,7 +89,6 @@ function Map() {
   const [locationError, setLocationError] = useState('')
   const [selectedRestaurant, setSelectedRestaurant] = useState(null)
   const [popupDishes, setPopupDishes] = useState([])
-  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 })
   const dropdownRef = useRef(null)
   const autocompleteTimer = useRef(null)
   const mapRef = useRef(null)
@@ -108,9 +109,8 @@ function Map() {
   }, [])
 
   useEffect(() => {
-    // If we restored a saved position, don't let geolocation override it -
-    // the user should come back to wherever they last were on the map
-    if (getSavedMapPosition()) return
+    // Geolocation only runs when there is no session position or saved default
+    if (getSavedMapPosition() || user?.defaultLocation?.lat) return
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -159,23 +159,6 @@ function Map() {
     fetchDishes()
   }, [selectedRestaurant])
 
-  /* Convert lat/lng to pixel position for popup placement */
-  const calculatePopupPosition = (map, restaurant) => {
-    const projection = map.getProjection()
-    const bounds = map.getBounds()
-    if (!projection || !bounds) return
-    const topRight = projection.fromLatLngToPoint(bounds.getNorthEast())
-    const bottomLeft = projection.fromLatLngToPoint(bounds.getSouthWest())
-    const scale = Math.pow(2, map.getZoom())
-    const worldPoint = projection.fromLatLngToPoint({
-      lat: restaurant.location.lat,
-      lng: restaurant.location.lng,
-    })
-    const x = (worldPoint.x - bottomLeft.x) * scale
-    const y = (worldPoint.y - topRight.y) * scale
-    setPopupPosition({ x, y })
-  }
-
   const fetchRestaurants = async (bounds) => {
     try {
       const response = await fetch(
@@ -192,14 +175,12 @@ function Map() {
   }
 
   const handleMapIdle = ({ center, bounds }) => {
-    // Fetch whatever is visible on screen, so pins cover the whole viewport
-    // at any zoom level instead of a fixed radius around the center
+    // Fetch everything visible in the current viewport
     if (bounds) {
       fetchRestaurants(bounds)
     }
 
-    // Save the current position so navigating away (e.g. to a restaurant
-    // page) and coming back returns the user to the same spot
+    // Save position so returning to the map lands in the same spot
     try {
       sessionStorage.setItem(
         'bitewise-map-position',
@@ -211,8 +192,7 @@ function Map() {
         })
       )
     } catch {
-      // Saving the position is a convenience - if storage fails, the map
-      // still works, so there is nothing to handle here
+      // Position saving is a convenience only
     }
   }
 
@@ -220,15 +200,12 @@ function Map() {
     mapRef.current = map
   }
 
-  const handleBoundsChanged = (map, restaurant) => {
-    calculatePopupPosition(map, restaurant)
-  }
-
   const handlePinClick = (restaurant) => {
     setSelectedRestaurant(restaurant)
-    if (mapRef.current) {
-      calculatePopupPosition(mapRef.current, restaurant)
-    }
+    setMapCenter({
+      lat: restaurant.location.lat,
+      lng: restaurant.location.lng,
+    })
   }
 
   const handleUseMyLocation = () => {
@@ -259,7 +236,16 @@ function Map() {
         }
       },
       () => {
-        setLocationError('Unable to get your location')
+        // Fall back to the saved default location when geolocation fails
+        if (user?.defaultLocation?.lat) {
+          setMapCenter({ lat: user.defaultLocation.lat, lng: user.defaultLocation.lng })
+          setCityLabel(user.defaultLocation.city || 'My default location')
+          setShowDropdown(false)
+          setShowSearch(false)
+          setLocationError('')
+        } else {
+          setLocationError('Unable to get your location')
+        }
       }
     )
   }
@@ -355,8 +341,7 @@ function Map() {
     return restaurant.allergens?.some((a) => activeLower.includes(a.toLowerCase()))
   }
 
-  // Verdigris for matches (or when no filter is active), cerulean for
-  // restaurants with no dishes free from the selected allergens
+  // Verdigris for matches, cerulean for non-matches
   const getPinColor = (restaurant) => {
     return matchesFilter(restaurant) ? '#25A691' : 'var(--cerulean-500)'
   }
@@ -454,7 +439,13 @@ const getPopupAllergenTags = () => {
       <div className='map-container'>
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
           <GoogleMap
-            defaultCenter={savedPosition ? { lat: savedPosition.lat, lng: savedPosition.lng } : fallbackCenter}
+            defaultCenter={
+              savedPosition
+                ? { lat: savedPosition.lat, lng: savedPosition.lng }
+                : user?.defaultLocation?.lat
+                  ? { lat: user.defaultLocation.lat, lng: user.defaultLocation.lng }
+                  : fallbackCenter
+            }
             defaultZoom={savedPosition?.zoom || 13}
             gestureHandling='greedy'
             disableDefaultUI={true}
@@ -465,8 +456,6 @@ const getPopupAllergenTags = () => {
               center={mapCenter}
               onIdle={handleMapIdle}
               onMapReady={handleMapReady}
-              selectedRestaurant={selectedRestaurant}
-              onBoundsChanged={handleBoundsChanged}
             />
 
             {restaurants.map((restaurant) => (
@@ -483,17 +472,22 @@ const getPopupAllergenTags = () => {
                 />
               </AdvancedMarker>
             ))}
-          </GoogleMap>
-        </APIProvider>
 
-        {selectedRestaurant && (
-          <div
-            className='map-popup'
-            style={{
-              left: `${popupPosition.x - 110}px`,
-              top: `${popupPosition.y - 200}px`,
-            }}
-          >
+            {/* Popup rendered as a map-anchored marker so it stays attached
+                to its pin while the map pans */}
+            {selectedRestaurant && (
+              <AdvancedMarker
+                position={{
+                  lat: selectedRestaurant.location.lat,
+                  lng: selectedRestaurant.location.lng,
+                }}
+                zIndex={1000}
+              >
+                <div
+                  className='map-popup'
+                  style={{ position: 'relative', left: 'auto', top: 'auto', marginBottom: '48px', pointerEvents: 'all' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
             <button className='map-popup-close' onClick={() => setSelectedRestaurant(null)}>x</button>
             <p className='map-popup-name'>{selectedRestaurant.name}</p>
             <p className='map-popup-address'>{selectedRestaurant.address}</p>
@@ -526,14 +520,17 @@ const getPopupAllergenTags = () => {
               </div>
             )}
 
-            <button
-              className='map-popup-btn'
-              onClick={() => navigate(`/restaurant/${selectedRestaurant._id}`)}
-            >
-              More info
-            </button>
-          </div>
-        )}
+                  <button
+                    className='map-popup-btn'
+                    onClick={() => navigate(`/restaurant/${selectedRestaurant._id}`)}
+                  >
+                    More info
+                  </button>
+                </div>
+              </AdvancedMarker>
+            )}
+          </GoogleMap>
+        </APIProvider>
       </div>
     </div>
   )

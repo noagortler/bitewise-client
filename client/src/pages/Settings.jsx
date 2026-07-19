@@ -424,7 +424,7 @@ function Settings() {
 
             <div className='settings-card'>
               <h3 className='settings-card-title'>Default location</h3>
-              <p className='settings-card-subtitle'>Set your default city so your map always opens somewhere relevant to you</p>
+              <p className='settings-card-subtitle'>Set your default city for the map to open to every time you log in</p>
 
               {locationError && <p className='settings-error'>{locationError}</p>}
               {locationSuccess && <p className='settings-success'>Location updated</p>}
