@@ -147,7 +147,9 @@ const getModificationsText = (dish) => {
     )
   }
 
-  if (loading) {
+  // Wait for both the dishes and the restaurant itself, so a slow
+  // restaurant fetch can't crash the render
+  if (loading || (!restaurant && !error)) {
     return (
       <div className='restaurant-page'>
         <Navbar />

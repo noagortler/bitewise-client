@@ -482,6 +482,7 @@ const getPopupAllergenTags = () => {
                   lng: selectedRestaurant.location.lng,
                 }}
                 zIndex={1000}
+                onClick={() => {}}
               >
                 <div
                   className='map-popup'
@@ -522,7 +523,7 @@ const getPopupAllergenTags = () => {
 
                   <button
                     className='map-popup-btn'
-                    onClick={() => navigate(`/restaurant/${selectedRestaurant._id}`)}
+                    onClick={() => { window.location.href = `/restaurant/${selectedRestaurant._id}` }}
                   >
                     More info
                   </button>
