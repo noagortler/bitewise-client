@@ -20,7 +20,7 @@ function Login() {
     return <Navigate to='/map' />
   }
 
-  const handleSubmit = async () => {
+  const signIn = async (credentials) => {
     setError('')
 
     try {
@@ -28,7 +28,7 @@ function Login() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(credentials),
       })
 
       const data = await response.json()
@@ -44,6 +44,15 @@ function Login() {
       setError('Something went wrong. Please try again.')
     }
   }
+
+  const handleSubmit = () => signIn({ email, password })
+
+  // Signs in with a shared demo account so visitors can explore without signing up.
+  // Credentials come from build-time env vars (VITE_DEMO_EMAIL / VITE_DEMO_PASSWORD).
+  const handleDemo = () => signIn({
+    email: import.meta.env.VITE_DEMO_EMAIL,
+    password: import.meta.env.VITE_DEMO_PASSWORD,
+  })
 
   return (
     <div className='auth-page'>
@@ -87,6 +96,10 @@ function Login() {
 
           <button className='btn-primary auth-btn' onClick={handleSubmit}>
             Log in
+          </button>
+
+          <button className='btn-secondary auth-btn' onClick={handleDemo}>
+            Try the demo
           </button>
 
           <p className='auth-footer'>
